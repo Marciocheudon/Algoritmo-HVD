@@ -21,18 +21,18 @@ BASE_CONHECIMENTO = [
 
 DOCUMENTOS = [f"{ITEM['pergunta']}  {ITEM['resposta']}" for ITEM in BASE_CONHECIMENTO]
 
-BM25 = BM25Okapi([d.split() for d in DOCUMENTOS])
-MODELO = SentenceTransformer("all-MiniLM-L6-v2")
+BM25 = BM25Okapi([d.lower().split() for d in DOCUMENTOS])
+MODELO = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
 EMBEDDINGS = MODELO.encode(DOCUMENTOS, normalize_embeddings=True)
 DIM = EMBEDDINGS.shape[1]
 INDICE = faiss.IndexFlatIP(DIM)
 INDICE.add(np.array(EMBEDDINGS, dtype="float32"))
 
-def hybrid_search(query, k=1, alpha=0.6):
+def hybrid_search(query, k=1, alpha=0.3):
     q_emb = MODELO.encode([query], normalize_embeddings=True).astype("float32")
     SIMILARIDADES, IDS = INDICE.search(q_emb, k=len(DOCUMENTOS))
     SIMILARIDADES = SIMILARIDADES[0]
-    SCORES_LEXICAIS = np.array(BM25.get_scores(query.split()), dtype="float32")
+    SCORES_LEXICAIS = np.array(BM25.get_scores(query.lower().split()), dtype="float32")
     def normalizar(x):
         x = np.array(x, dtype="float32"); r = x.max() - x.min()
         return (x - x.min()) / (r + 1e-9)
@@ -43,7 +43,7 @@ def hybrid_search(query, k=1, alpha=0.6):
     return [(i, float(HIBRIDO[i])) for i in ORDEM]
 
 def answer(query):
-    MELHOR_IDX, score = hybrid_search(query, k=1, alpha=0.65)[0]
+    MELHOR_IDX, score = hybrid_search(query, k=1, alpha=0.3)[0]
     ITEM = BASE_CONHECIMENTO[MELHOR_IDX]
     return {
         "pergunta_base": ITEM["pergunta"],

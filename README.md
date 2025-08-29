@@ -59,7 +59,7 @@
 	4.	Combinação: mistura pelos pesos alpha e 1-alpha.
 	5.	Ranking final: retorna top-k.
 
-    ![preview](https://raw.githubusercontent.com/Marciocheudon/Algoritmo-HVD/main/teste.png)
+![teste](https://raw.githubusercontent.com/Marciocheudon/Algoritmo-HVD/main/teste.png)
 
 ### Extensões sugeridas
 	•	Carregar a base de FAQ de CSV/JSON.

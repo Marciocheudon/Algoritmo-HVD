@@ -1,5 +1,3 @@
-# pip install sentence-transformers faiss-cpu rank-bm25
-
 from sentence_transformers import SentenceTransformer
 from rank_bm25 import BM25Okapi
 import faiss, numpy as np
@@ -17,7 +15,7 @@ BASE_CONHECIMENTO = [
 
     {
         "pergunta": "Plano Pro inclui o quê?",
-        "resposta": "O Plano Pro inclui suporte prioritário, relatórios avançados e integração com API."
+        "resposta": "O Plano Pro inclui suporte prioritário, relatórios avançados e integração com API. Tudo por apenas R$ 54,90/mês."
     },
 ]
 
@@ -54,7 +52,7 @@ def answer(query):
     }
 
 if __name__ == "__main__":
-    print("Chatbot de Suporte (digite 'sair' para encerrar)\n")
+    print("Suporte (digite 'sair' para encerrar)\n")
     while True:
         q = input("Você: ").strip()
         if not q or q.lower() == "sair": break
